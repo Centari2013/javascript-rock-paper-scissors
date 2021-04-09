@@ -52,7 +52,7 @@ function game(){
     const loseGameMessage = "You LOST the game!";
 
     let winCounter = 0;
-    
+
     for (let i = 0; i < 5; i++){
         let playerSelection = prompt("Rock, paper, or scissors? ");
         let computerSelection = computerPlay();
@@ -75,9 +75,3 @@ function game(){
 
 game();
 
-
-/*
-const playerSelection = "rock";
-const computerSelection = computerPlay();
-console.log(playRound(playerSelection, computerSelection));
-*/
