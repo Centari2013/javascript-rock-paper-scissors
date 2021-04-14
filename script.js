@@ -1,4 +1,28 @@
-function computerPlay() {
+//globals
+let playerScore = 0;
+let computerScore = 0;
+let gameButtons = document.querySelectorAll(".game-btn");
+
+function addButtonFunction() {
+    gameButtons = document.querySelectorAll(".game-btn");
+    gameButtons.forEach((button) => {
+        button.addEventListener('click', function buttonActions() {
+            playRound(button.id, computerPlay());
+            winCheck();
+        });
+    });
+}
+
+function removeButtonFunction() {
+    gameButtons.forEach((button) => {
+        let cleanGameButton = button.cloneNode(true);
+        button.parentNode.replaceChild(cleanGameButton, button);
+        console.log(cleanGameButton.className);
+        console.log(cleanGameButton.id);
+    });
+}
+
+function computerPlay() { //finished
     let num = Math.floor(Math.random() * 3) + 1;
     let choice = "";
     switch (num) {
@@ -11,67 +35,61 @@ function computerPlay() {
         case 3:
             choice = "Scissors";
             break;
-
     }
     return choice;
 }
 
-function playRound(playerSelection, computerSelection) {
-    playerSelection = playerSelection[0].toUpperCase() + playerSelection.slice(1).toLowerCase();
-    
+function playRound(playerSelection, computerSelection) { //finished
+    let winRoundMessage = "You won the round! " + playerSelection + " beats " + computerSelection;
+    let loseRoundMessage = "You lost the round! " + computerSelection + " beats " + playerSelection;
+    let drawMessage = "It's a draw!";
+
     if (playerSelection == computerSelection){
-        return "It's a draw!";
+        printScore(drawMessage);
     }
-    else if (playerSelection == "Rock"){
-        if (computerSelection == "Paper"){
-            return false;
-        }else{
-            return true;
-        }
-    }else if (playerSelection == "Paper"){
-        if (computerSelection == "Rock"){
-            return true;
-        }else{
-            return false;
-        }
-    }else if(playerSelection == "Scissors"){
-        if(computerSelection == "Rock"){
-            return false;
-        }else{
-            return true;
-        }
+    else if (playerSelection == "Rock" && computerSelection == "Scissors" ||
+      playerSelection == "Paper" && computerSelection == "Rock" ||
+      playerSelection == "Scissors" && computerSelection == "Paper"){
+            playerScore++;
+            printScore(winRoundMessage);
     }else{
-        return "That's not a choice!";
-    }
-
-}
-
-function game(){
-    
-    const winGameMessage = "You WON the game!";
-    const loseGameMessage = "You LOST the game!";
-
-    let winCounter = 0;
-
-    for (let i = 0; i < 5; i++){
-        let playerSelection = prompt("Rock, paper, or scissors? ");
-        let computerSelection = computerPlay();
-        let winRoundMessage = "You Win! " + playerSelection + " beats " + computerSelection;
-        let loseRoundMessage = "You Lose! " + computerSelection + " beats " + playerSelection;
-        if (playRound(playerSelection, computerSelection)){
-            console.log(winRoundMessage);
-            winCounter ++;
-        }else{
-            console.log(loseRoundMessage);
-        }
-    }
-
-    if (winCounter >= 3){
-        console.log(winGameMessage);
-    }else{
-        console.log(loseGameMessage);
+        computerScore++;
+        printScore(loseRoundMessage);
     }
 }
 
-game();
+function printScore(message = "Press a Button to Start"){ //needs testing
+    const resultBox = document.querySelector("#result-box");
+    while (resultBox.firstChild){
+        resultBox.removeChild(resultBox.firstChild);
+    }
+    let results = document.createElement('p');
+    results.textContent = "Your Score: " + playerScore + "\n" + 
+      "Computer Score: " + computerScore + "\n" + message; 
+    resultBox.appendChild(results);
+}
+
+function gameReset(){
+    playerScore = 0;
+    computerScore = 0;
+    printScore();
+    addButtonFunction();
+}
+
+function winCheck(){
+    let winGameMessage = "You won the game!";
+    let loseGameMessage = "You lost the game!";
+    if (computerScore == 5) {
+        removeButtonFunction();
+        printScore(loseGameMessage);
+        setTimeout(gameReset, 3000);
+    } else if (playerScore == 5) {
+        removeButtonFunction();
+        printScore(winGameMessage);
+        setTimeout(gameReset(), 3000);
+    }
+}
+
+addButtonFunction();
+printScore();
 
