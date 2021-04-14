@@ -3,5 +3,5 @@
 }
 
 #result-box {
-    white-space: pre-wrap;
+    white-space: pre-wrap; /*allows newline to print correctly in printScore function*/
 }
