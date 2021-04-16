@@ -6,7 +6,7 @@ let gameButtons = document.querySelectorAll(".game-btn");
 function addButtonFunction() {
     gameButtons = document.querySelectorAll(".game-btn"); //sets gameButtons back to game-btn class after removal function is run
     gameButtons.forEach((button) => {
-        button.addEventListener('click', function buttonActions() {
+        button.addEventListener('click', function() {
             playRound(button.id, computerPlay());
             winCheck();
         });
